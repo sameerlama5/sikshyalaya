@@ -6,11 +6,27 @@ Smart Schooling Solution
 
 ### Phase 1: Core Functionality
 
-- [x] User Authentication and Authorization
-- [x] Student Information Management
-- [x] Teacher Information Management
-- [x] Course Management
-- [ ] Basic Attendance Tracking
+- [ ] User Authentication and Authorization
+  - [ ] Register
+    - [ ] ROLE: ADMIN, Teacher, Student  (fields: email, phoneNumber, password, role, fullName, fatherName, motherName)
+    - [ ] PASSWORD ENCRYPTION
+    - [ ] Register API
+    - [x] Register Form
+
+  - [ ] Login
+    - [ ] email based multi user login
+    - [ ] PASSWORD VERIFICATION
+    - [ ] Login API
+    - [x] Login Form
+    - [ ] Generate Token (JWT)
+- [ ] Admin Panel
+  - [ ] Teacher and Student login approval via Admin 
+  - [ ] Add different courses and class and schedules for different courses and class, and section and classteacher for the section
+- [ ] Teacher Panel
+  - [ ] Teacher can add course content for the subject he is assigned.
+  - [ ] Create multiple topics based on table of contents, and add multiple segments/info to the topics
+- [ ] Student Panel
+  - [ ] Can search/view courses-topics/ info of the topics
 
 ### Phase 2: Academic Features
 
@@ -37,7 +53,6 @@ Smart Schooling Solution
 
 - [ ] Online Learning Management System (LMS) Integration
 - [ ] Student Performance Analytics
-- [ ] Mobile App for Students and Parents
 - [ ] Alumni Network and Management
 
 ## Getting Started
