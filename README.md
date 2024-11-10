@@ -46,3 +46,47 @@ To get started with the School Management System, follow these steps:
 
 1. Clone the repository
 2. Install dependencies for both client and server:
+
+```
+cd client 
+npm install
+npm run dev
+
+cd server
+npm install
+npm run dev
+```
+
+Both the client and server can be started using the `npm run dev` command in their respective directories.
+
+## Technologies and Packages Used
+
+### Client-side (Next.js)
+
+- Next.js: React framework for building web applications
+- React: JavaScript library for building user interfaces
+- @nextui-org/react: UI component library for React
+- Radix UI: Unstyled, accessible components for React
+- Formik: Form library for React
+- Yup: JavaScript schema validation library
+- Recharts: Composable charting library for React
+- Framer Motion: Animation library for React
+- Tailwind CSS: Utility-first CSS framework
+
+### Development Tools
+
+- ESLint: JavaScript linting tool
+- PostCSS: CSS transformation tool
+- Tailwind CSS: Utility-first CSS framework
+
+## Contributing
+
+We welcome contributions to the School Management System! Please read our `CONTRIBUTING.md` file for guidelines on how to submit issues, feature requests, and pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the `LICENSE.md` file for details.
+
+## Contact
+
+For any queries or support, please contact our team at support@schoolmanagementsystem.com
