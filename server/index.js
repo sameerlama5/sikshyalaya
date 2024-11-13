@@ -1,6 +1,24 @@
 const express = require('express')
 const app = express()
 const port = 8000
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1:27017/sikshyalayaDb');
+
+const { Schema } = mongoose;
+// email, phoneNumber, password, role, fullName, fatherName, motherName)
+const userSchema = new Schema({
+  email: String, 
+  phoneNumber: Number,
+  password: String,
+  role: {
+    type: String,
+    enum : ['student','teacher', 'admin'],
+    default: 'student'
+  },
+  fullName:String,
+  fatherName: String,
+  motherName: String
+});
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
