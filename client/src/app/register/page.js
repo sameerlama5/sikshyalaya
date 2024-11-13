@@ -15,6 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
+import axios from "axios";
 
 const phoneRegExp = /^[0-9]{10}$/;
 
@@ -58,7 +59,7 @@ export default function RegisterPage() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        console.log(values);
+        axios.post('http://localhost:8000/register', values)
         toast({
           title: "Registration Successful",
           description: "Your account has been created successfully.",

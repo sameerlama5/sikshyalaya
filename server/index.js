@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 8000
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 mongoose.connect('mongodb://127.0.0.1:27017/sikshyalayaDb');
 
 const { Schema } = mongoose;
@@ -19,18 +21,14 @@ const userSchema = new Schema({
   fatherName: String,
   motherName: String
 });
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+const User = mongoose.model('User', userSchema);
+app.use(express.json())
+app.use(cors())
+app.post('/register', (req, res) => {
+  User.create(req.body)
+  res.send('ok')
 })
 
-app.get('/users', (req, res) => {
-    res.send(['ram','shyam','hari'])
-  })
-
-app.get('/products', (req, res) => {
-res.send(['hawkins','baltra'])
-})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
