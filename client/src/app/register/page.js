@@ -13,9 +13,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+
 import Image from "next/image";
 import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 const phoneRegExp = /^[0-9]{10}$/;
 
@@ -44,8 +45,7 @@ const validationSchema = Yup.object({
 });
 
 export default function RegisterPage() {
-  const { toast } = useToast();
-
+  const { toast } = useToast()
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -59,17 +59,18 @@ export default function RegisterPage() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        axios.post('http://localhost:8000/register', values)
+       const {data} =await  axios.post('http://localhost:8000/register', values)
+      if(data){
         toast({
-          title: "Registration Successful",
-          description: "Your account has been created successfully.",
-        });
+          title: data.msg
+        })
+      }
       } catch (error) {
+        debugger;
         toast({
           variant: "destructive",
-          title: "Registration Failed",
-          description: "Something went wrong. Please try again.",
-        });
+          title: error?.response?.data?.msg
+        })
       }
     },
   });
