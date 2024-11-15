@@ -5,6 +5,8 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
 
 const dbConnect = async()=>{
   try{
@@ -28,6 +30,7 @@ const userSchema = new Schema({
     enum : ['student','teacher', 'admin'],
     default: 'student'
   },
+  isVerified: Boolean,
   fullName:String,
   fatherName: String,
   motherName: String
@@ -52,6 +55,33 @@ app.post('/register',async (req, res) => {
             res.send({msg: req.body.role + " created successfully"})
 
 })
+
+
+
+app.post('/login',async (req, res) => {
+  const {email,password} = req.body
+  //STEP 1: check if email exists
+  const user = await User.findOne({email})
+
+  if(!user) return res.status(401).send({msg: "Invalid Email!!"})
+
+  //STEP 2: Compare the password
+  const isPasswordMatched = await bcrypt.compare(password, user.password)
+
+  if(!isPasswordMatched) return res.status(401).send({msg: "Invalid Password!!"})
+
+  //STEP 3: Generate unique token for the user to mark that he is logged in
+  const token = jwt.sign({ email }, process.env.SECRET_KEY);
+
+  res.send({
+    token,
+    user,
+    isLoggednIn: true,
+    msg: 'Authorized!!'
+  })
+     
+})
+
 
 
 app.listen(port, () => {
