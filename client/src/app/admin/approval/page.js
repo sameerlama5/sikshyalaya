@@ -7,7 +7,7 @@ const Approval = () => {
 
   const [userList, setUserList] = useState([])
   const fetchUsers =  async()=>{
-    const {data} = await axios.get('http://localhost:8000/users')
+    const {data} = await axios.get('http://localhost:8080/users')
     setUserList(data)
   }
   useEffect(()=>{

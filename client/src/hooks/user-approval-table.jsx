@@ -6,14 +6,11 @@ import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import axios from 'axios';
 
-
-
 export default function UserApprovalTable(props) {
   const [users, setUsers] = useState(props.userList)
-
-  useEffect(()=>{
+  useEffect(() => {
     setUsers(props.userList)
-  },[props.userList])
+  }, [props.userList])
   const [selectedUser, setSelectedUser] = useState(null)
   const [action, setAction] = useState(null)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -24,16 +21,15 @@ export default function UserApprovalTable(props) {
     setDialogOpen(true)
   }
 
-  const confirmAction = async(id) => {
+  const confirmAction = async () => {
     setDialogOpen(false)
-    if(actionType == 'approve'){
-    await axios.patch('http://localhost:8000/approve-user/'+selectedUser._id)
-    }else{
-      //add reject api
+    if (action == 'approve') {
+      await axios.patch('http://localhost:8080/approve-user/' + selectedUser._id)
+    } else if (action == 'reject') {
+      await axios.patch('http://localhost:8080/reject-user/' + selectedUser._id)
     }
-     props.fetchUsers()
+    props.fetchUsers()
   }
-
 
   return (
     (<div className='w-full overflow-x-auto' >
@@ -62,7 +58,7 @@ export default function UserApprovalTable(props) {
                   {user.role}
                 </Badge>
               </TableCell>
-              <TableCell>{user.isVerified ? "Approved": "Pending"}</TableCell>
+              <TableCell>{user.isVerified ? "Approved" : "Pending"}</TableCell>
 
               <TableCell>{user.fatherName}</TableCell>
               <TableCell>{user.motherName}</TableCell>
@@ -89,7 +85,7 @@ export default function UserApprovalTable(props) {
           </DialogHeader>
           <div className="flex justify-end space-x-2l">
             <Button className=" text-2xl" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button className=" text-2xl" onClick={()=> confirmAction()}>Confirm</Button>
+            <Button className=" text-2xl" onClick={() => confirmAction()}>Confirm</Button>
           </div>
         </DialogContent>
       </Dialog>

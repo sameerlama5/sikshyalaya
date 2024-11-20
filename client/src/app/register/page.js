@@ -59,14 +59,13 @@ export default function RegisterPage() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-       const {data} =await  axios.post('http://localhost:8000/register', values)
+       const {data} =await  axios.post('http://localhost:8080/register', values)
       if(data){
         toast({
           title: data.msg
         })
       }
       } catch (error) {
-        debugger;
         toast({
           variant: "destructive",
           title: error?.response?.data?.msg
