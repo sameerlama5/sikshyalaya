@@ -7,21 +7,21 @@ Smart Schooling Solution
 ### Phase 1: Core Functionality
 
 - [ ] User Authentication and Authorization
-  - [ ] Register
-    - [ ] ROLE: ADMIN, Teacher, Student  (fields: email, phoneNumber, password, role, fullName, fatherName, motherName)
-    - [ ] PASSWORD ENCRYPTION
-    - [ ] Register API
+  - [x] Register
+    - [x] ROLE: ADMIN, Teacher, Student  (fields: email, phoneNumber, password, role, fullName, fatherName, motherName)
+    - [x] PASSWORD ENCRYPTION
+    - [x] Register API
     - [x] Register Form
 
   - [ ] Login
     - [ ] email based multi user login
-    - [ ] PASSWORD VERIFICATION
-    - [ ] Login API
+    - [x] PASSWORD VERIFICATION
+    - [x] Login API
     - [x] Login Form
-    - [ ] Generate Token (JWT)
+    - [x] Generate Token (JWT)
 - [ ] Admin Panel
-  - [ ] Teacher and Student login approval via Admin 
-  - [ ] Add different courses and class and schedules for different courses and class, and section and classteacher for the section
+  - [x] Teacher and Student login approval via Admin 
+  - [ ] Add different courses and class and schedules, and section and classteacher for the section
 - [ ] Teacher Panel
   - [ ] Teacher can add course content for the subject he is assigned.
   - [ ] Create multiple topics based on table of contents, and add multiple segments/info to the topics

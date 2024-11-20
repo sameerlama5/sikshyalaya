@@ -130,7 +130,7 @@ export default function RegisterPage() {
                   className="w-full bg-white text-black hover:bg-white/90 transition-all duration-200"
                   disabled={formik.isSubmitting}
                 >
-                  {formik.isSubmitting ? "Creating Account..." : "Create Account"}
+                  {formik.isSubmitting ? "Signing In..." : "Login"}
                 </Button>
               </div>
             </form>
