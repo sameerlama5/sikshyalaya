@@ -1,42 +1,56 @@
-'use client';
-import { useEffect, useState } from 'react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import axios from 'axios';
-
-
+"use client";
+import { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import axios from "axios";
 
 export default function UserApprovalTable(props) {
-  const [users, setUsers] = useState(props.userList)
+  const [users, setUsers] = useState(props.userList);
 
-  useEffect(()=>{
-    setUsers(props.userList)
-  },[props.userList])
-  const [selectedUser, setSelectedUser] = useState(null)
-  const [action, setAction] = useState(null)
-  const [dialogOpen, setDialogOpen] = useState(false)
+  useEffect(() => {
+    setUsers(props.userList);
+  }, [props.userList]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [action, setAction] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleAction = (user, actionType) => {
-    setSelectedUser(user)
-    setAction(actionType)
-    setDialogOpen(true)
-  }
+    setSelectedUser(user);
+    setAction(actionType);
+    setDialogOpen(true);
+  };
 
-  const confirmAction = async(id) => {
-    setDialogOpen(false)
-    if(actionType == 'approve'){
-    await axios.patch('http://localhost:8000/approve-user/'+selectedUser._id)
-    }else{
-      //add reject api
+  const confirmAction = async (id) => {
+    setDialogOpen(false);
+    if (action == "approve") {
+      await axios.patch(
+        "http://localhost:8000/approve-user/" + selectedUser._id
+      );
+    } else {
+      await axios.patch(
+        "http://localhost:8000/reject-user/" + selectedUser._id
+      );
     }
-     props.fetchUsers()
-  }
-
+    props.fetchUsers();
+  };
 
   return (
-    (<div className='w-full overflow-x-auto' >
+    <div className="w-full overflow-x-auto">
       <Table className="text-lg w-full ">
         <TableHeader className="bg-black ">
           <TableRow>
@@ -58,21 +72,31 @@ export default function UserApprovalTable(props) {
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.phoneNumber}</TableCell>
               <TableCell>
-                <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
+                <Badge
+                  variant={user.role === "admin" ? "default" : "secondary"}
+                >
                   {user.role}
                 </Badge>
               </TableCell>
-              <TableCell>{user.isVerified ? "Approved": "Pending"}</TableCell>
+              <TableCell>{user.isVerified ? "Approved" : "Pending"}</TableCell>
 
               <TableCell>{user.fatherName}</TableCell>
               <TableCell>{user.motherName}</TableCell>
               <TableCell>
                 <div className="flex space-x-2">
-                  <Button size="sm" onClick={() => handleAction(user, 'approve')}>Approve</Button>
+                  <Button
+                    size="sm"
+                    onClick={() => handleAction(user, "approve")}
+                  >
+                    Approve
+                  </Button>
                   <Button
                     size="sm"
                     variant="destructive"
-                    onClick={() => handleAction(user, 'reject')}>Reject</Button>
+                    onClick={() => handleAction(user, "reject")}
+                  >
+                    Reject
+                  </Button>
                 </div>
               </TableCell>
             </TableRow>
@@ -84,15 +108,24 @@ export default function UserApprovalTable(props) {
           <DialogHeader>
             <DialogTitle>Confirm Action</DialogTitle>
             <DialogDescription>
-              Are you sure you want to {action} the registration for {selectedUser?.fullName}?
+              Are you sure you want to {action} the registration for{" "}
+              {selectedUser?.fullName}?
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end space-x-2l">
-            <Button className=" text-2xl" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button className=" text-2xl" onClick={()=> confirmAction()}>Confirm</Button>
+            <Button
+              className=" text-2xl"
+              variant="outline"
+              onClick={() => setDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button className=" text-2xl" onClick={() => confirmAction()}>
+              Confirm
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
-    </div>)
+    </div>
   );
 }
