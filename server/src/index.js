@@ -15,6 +15,8 @@ app.use(cors())
 app.use(UserRoute)
 app.use(ClassRoute)
 app.use(SubjectRoute)
+// http://localhost:8000/subject/{sectionId}/subject
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
