@@ -11,8 +11,8 @@ const sectionSchema = new Schema({
      ref: "Class"
      },
   subjects: [{
-    type: String,
-    required: true
+    type:  mongoose.Schema.Types.ObjectId,
+     ref: "Subject"
   }],
   classTeacher: { 
     type: mongoose.Schema.Types.ObjectId,
