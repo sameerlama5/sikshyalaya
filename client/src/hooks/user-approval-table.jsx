@@ -16,23 +16,27 @@ export default function UserApprovalTable(props) {
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const handleAction = (user, actionType) => {
-    setSelectedUser(user)
-    setAction(actionType)
-    setDialogOpen(true)
-  }
+    setSelectedUser(user);
+    setAction(actionType);
+    setDialogOpen(true);
+  };
 
-  const confirmAction = async () => {
-    setDialogOpen(false)
-    if (action == 'approve') {
-      await axios.patch('http://localhost:8080/approve-user/' + selectedUser._id)
-    } else if (action == 'reject') {
-      await axios.patch('http://localhost:8080/reject-user/' + selectedUser._id)
+  const confirmAction = async (id) => {
+    setDialogOpen(false);
+    if (action == "approve") {
+      await axios.patch(
+        "http://localhost:8000/approve-user/" + selectedUser._id
+      );
+    } else {
+      await axios.patch(
+        "http://localhost:8000/reject-user/" + selectedUser._id
+      );
     }
-    props.fetchUsers()
-  }
+    props.fetchUsers();
+  };
 
   return (
-    (<div className='w-full overflow-x-auto' >
+    <div className="w-full overflow-x-auto">
       <Table className="text-lg w-full ">
         <TableHeader className="bg-black ">
           <TableRow>
@@ -54,7 +58,9 @@ export default function UserApprovalTable(props) {
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.phoneNumber}</TableCell>
               <TableCell>
-                <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
+                <Badge
+                  variant={user.role === "admin" ? "default" : "secondary"}
+                >
                   {user.role}
                 </Badge>
               </TableCell>
@@ -64,11 +70,19 @@ export default function UserApprovalTable(props) {
               <TableCell>{user.motherName}</TableCell>
               <TableCell>
                 <div className="flex space-x-2">
-                  <Button size="sm" onClick={() => handleAction(user, 'approve')}>Approve</Button>
+                  <Button
+                    size="sm"
+                    onClick={() => handleAction(user, "approve")}
+                  >
+                    Approve
+                  </Button>
                   <Button
                     size="sm"
                     variant="destructive"
-                    onClick={() => handleAction(user, 'reject')}>Reject</Button>
+                    onClick={() => handleAction(user, "reject")}
+                  >
+                    Reject
+                  </Button>
                 </div>
               </TableCell>
             </TableRow>
@@ -80,7 +94,8 @@ export default function UserApprovalTable(props) {
           <DialogHeader>
             <DialogTitle>Confirm Action</DialogTitle>
             <DialogDescription>
-              Are you sure you want to {action} the registration for {selectedUser?.fullName}?
+              Are you sure you want to {action} the registration for{" "}
+              {selectedUser?.fullName}?
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end space-x-2l">
@@ -89,6 +104,6 @@ export default function UserApprovalTable(props) {
           </div>
         </DialogContent>
       </Dialog>
-    </div>)
+    </div>
   );
 }

@@ -41,7 +41,7 @@ export default function RegisterPage() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-       const {data} =await  axios.post('http://localhost:8080/login', values)
+       const {data} =await  axios.post('http://localhost:8000/login', values)
        const {isLoggednIn, user} =data
        if(isLoggednIn) router.push(`/${user.role}/dashboard`)
       if(data){

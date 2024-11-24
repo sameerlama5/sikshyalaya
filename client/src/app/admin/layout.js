@@ -1,6 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
-import { ChevronsLeftRightEllipsisIcon, Home, Inbox, Settings } from "lucide-react"
+import { ChevronsLeftRightEllipsisIcon, CircleSlash2Icon, Home, Inbox, Settings } from "lucide-react"
 const adminItems = [
   {
     title: "Dashboard",
@@ -11,6 +11,11 @@ const adminItems = [
     title: "Students",
     url: "students",
     icon: Inbox,
+  },
+  {
+    title: "Class",
+    url: "class",
+    icon: CircleSlash2Icon,
   },
   {
     title: "Approval",
