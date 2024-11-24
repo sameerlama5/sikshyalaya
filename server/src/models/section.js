@@ -6,26 +6,26 @@ const sectionSchema = new Schema({
     type: String,
     required: true,
   },
+  class: { 
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "Class"
+     },
   subjects: [{
     type: String,
     required: true
   }],
-  classTeacher: {
-    type: String,
-    required: true
-  },
-  students: [{
-    type: String,
-    required: true
-  }],
-  teachers: [{
-    type: String,
-    required: true
-  }],
-  academicYear: {
-    type: String,
-    required: true
-  },
+  classTeacher: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+    },
+  students: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+    }],
+  teachers: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+    }],
   roomNumber: {
     type: String,
     required: true

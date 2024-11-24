@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
 const classSchema = new Schema({
-  class: {type:String,    required: true, unique:true}, 
+    gradeLevel: { type: Number, required: true },
+    academicYear: { type: String, required: true },
 });
 const Class = mongoose.model('Class', classSchema);
 module.exports = Class
