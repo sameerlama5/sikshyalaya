@@ -105,3 +105,6 @@ This project is licensed under the MIT License - see the `LICENSE.md` file for d
 ## Contact
 
 For any queries or support, please contact our team at support@schoolmanagementsystem.com
+
+
+

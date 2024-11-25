@@ -19,6 +19,7 @@ const addNewClass = async (req, res) => {
 
   const postNewSectionInClassId = async (req, res) => {
     Section.create({...req.body, class: req.params.classId})
+    res.send("Posted!!")
   };
 
   module.exports = {addNewClass,getAllClass,getSectionsByClassId,postNewSectionInClassId }; 
