@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useRouter } from 'next/navigation';
 
 export default function ClassManagement() {
   const [classes, setClasses] = useState([])
   const [gradeLevel, setGradeLevel] = useState('')
   const [academicYear, setAcademicYear] = useState('')
   const [loading, setLoading] = useState(false)
-
+  const router = useRouter()
   useEffect(() => {
     fetchClasses()
   }, [])
@@ -85,7 +86,7 @@ export default function ClassManagement() {
           {classes.length > 0 ? (
             <ul className="space-y-2 text-black">
               {classes.map((cls) => (
-                <li key={cls._id} className="bg-gray-100 p-2 rounded">
+                <li onClick={()=>router.push(`class/${cls._id}/sections`)} key={cls._id} className="bg-gray-100 p-2 rounded">
                   Grade {cls.gradeLevel} - {cls.academicYear}
                 </li>
               ))}

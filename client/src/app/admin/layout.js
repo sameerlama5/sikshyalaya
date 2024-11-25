@@ -14,7 +14,7 @@ const adminItems = [
   },
   {
     title: "Class",
-    url: "class",
+    url: "admin/class",
     icon: CircleSlash2Icon,
   },
   {
