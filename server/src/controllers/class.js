@@ -13,12 +13,13 @@ const addNewClass = async (req, res) => {
 
   
   const getSectionsByClassId = async (req, res) => {
-  const data = await  Section.find({class: req.params.classId})
+  const data = await  Section.find({class: req.params.classId}).populate("subjects")
     res.send(data)
   };
 
   const postNewSectionInClassId = async (req, res) => {
     Section.create({...req.body, class: req.params.classId})
+    res.send("Posted!!")
   };
 
   module.exports = {addNewClass,getAllClass,getSectionsByClassId,postNewSectionInClassId }; 
