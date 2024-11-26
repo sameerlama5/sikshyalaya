@@ -4,12 +4,12 @@ import { Home, Inbox, Settings } from "lucide-react"
 const studentItems = [
   {
     title: "Dashboard",
-    url: "students/dashboard",
+    url: "/student/dashboard",
     icon: Home,
   },
   {
     title: "Course",
-    url: "/students/course",
+    url: "/student/course",
     icon: Inbox,
   },
   {

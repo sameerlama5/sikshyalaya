@@ -3,11 +3,10 @@ const app = express()
 const port = 8000
 const cors = require('cors');
 require('dotenv').config()
-const UserRoute = require('./routes/user')
-const ClassRoute = require('./routes/class')
-const SubjectRoute = require('./routes/subject')
+const UserRoute = require('./src/routes/user')
+const ClassRoute = require('./src/routes/class')
 
-const dbConnect = require('./db/connection');
+const dbConnect = require('./src/db/connection');
 dbConnect()
 
 app.use(express.json())
@@ -32,7 +31,6 @@ app.listen(port, () => {
 //           tabular form                               object based
 //           User.findAll()--->ORM(sequalize)           User.find()  ---> ODM(Object Data Modeling) (mongoose)
 //           relational DB                              schemaless/non-relationaldb
-
 
 
 

@@ -30,7 +30,7 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const router = useRouter()
   const { toast } = useToast()
   const formik = useFormik({
@@ -52,7 +52,7 @@ export default function RegisterPage() {
       } catch (error) {
         toast({
           variant: "destructive",
-          title: error?.response?.data?.msg
+          title: error?.response?.data?.msg || "Something went wrong",
         })
       }
     },
