@@ -3,8 +3,10 @@ import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+// import { toast, ToastContainer } from 'react-toastify'
+// import 'react-toastify/dist/ReactToastify.css'
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 import { useRouter } from 'next/navigation';
 
 export default function ClassManagement() {
@@ -12,7 +14,9 @@ export default function ClassManagement() {
   const [gradeLevel, setGradeLevel] = useState('')
   const [academicYear, setAcademicYear] = useState('')
   const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
   const router = useRouter()
+
   useEffect(() => {
     fetchClasses()
   }, [])
@@ -24,7 +28,11 @@ export default function ClassManagement() {
       const data = await response.json()
       setClasses(data)
     } catch (error) {
-      toast.error('Failed to fetch classes')
+      toast({
+        title: "Error",
+        description: "Failed to fetch classes",
+        variant: "destructive",
+      })
     }
   }
 
@@ -40,19 +48,26 @@ export default function ClassManagement() {
         body: JSON.stringify({ gradeLevel: Number(gradeLevel), academicYear }),
       })
       if (!response.ok) throw new Error('Failed to add class')
-      toast.success('Class added successfully')
+      toast({
+        title: "Success",
+        description: "Class added successfully",
+      })
       setGradeLevel('')
       setAcademicYear('')
       fetchClasses()
     } catch (error) {
-      toast.error('Failed to add class')
+      toast({
+        title: "Error",
+        description: "Failed to add class",
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    (<div className="container mx-auto p-4">
+    <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Class Management</h1>
       <Card className="mb-6">
         <CardHeader>
@@ -60,18 +75,35 @@ export default function ClassManagement() {
         </CardHeader>
         <CardContent>
           <form onSubmit={addClass} className="space-y-4">
-            <Input
-              type="number"
-              placeholder="Grade Level"
-              value={gradeLevel}
-              onChange={(e) => setGradeLevel(e.target.value)}
-              required />
-            <Input
-              type="text"
-              placeholder="Academic Year"
-              value={academicYear}
-              onChange={(e) => setAcademicYear(e.target.value)}
-              required />
+            <div>
+              <label htmlFor="gradeLevel" className="block text-sm font-medium text-gray-200 mb-1">
+                Grade Level
+              </label>
+              <Input
+                id="gradeLevel"
+                type="number"
+                placeholder="Enter grade level"
+                value={gradeLevel}
+                onChange={(e) => setGradeLevel(e.target.value)}
+                required
+                min="1"
+                max="12"
+              />
+            </div>
+            <div>
+              <label htmlFor="academicYear" className="block text-sm font-medium text-gray-200 mb-1">
+                Academic Year
+              </label>
+              <Input
+                id="academicYear"
+                type="text"
+                placeholder="Enter academic year"
+                value={academicYear}
+                onChange={(e) => setAcademicYear(e.target.value)}
+                required
+                title="Please enter the academic year"
+              />
+            </div>
             <Button type="submit" disabled={loading}>
               {loading ? 'Adding...' : 'Add Class'}
             </Button>
@@ -96,8 +128,8 @@ export default function ClassManagement() {
           )}
         </CardContent>
       </Card>
-      <ToastContainer />
-    </div>)
+      <Toaster />
+    </div>
   );
 }
 
