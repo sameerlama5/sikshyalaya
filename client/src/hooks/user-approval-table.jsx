@@ -1,33 +1,19 @@
-"use client";
-import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import axios from "axios";
+'use client';
+import { useEffect, useState } from 'react'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import axios from 'axios';
 
 export default function UserApprovalTable(props) {
-  const [users, setUsers] = useState(props.userList);
-
+  const [users, setUsers] = useState(props.userList)
   useEffect(() => {
-    setUsers(props.userList);
-  }, [props.userList]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [action, setAction] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
+    setUsers(props.userList)
+  }, [props.userList])
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [action, setAction] = useState(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   const handleAction = (user, actionType) => {
     setSelectedUser(user);
@@ -113,16 +99,8 @@ export default function UserApprovalTable(props) {
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end space-x-2l">
-            <Button
-              className=" text-2xl"
-              variant="outline"
-              onClick={() => setDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button className=" text-2xl" onClick={() => confirmAction()}>
-              Confirm
-            </Button>
+            <Button className=" text-2xl" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button className=" text-2xl" onClick={() => confirmAction()}>Confirm</Button>
           </div>
         </DialogContent>
       </Dialog>
