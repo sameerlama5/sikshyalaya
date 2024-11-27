@@ -27,7 +27,7 @@ const sectionSchema = new Schema({
     ref: "User"
     }],
   roomNumber: {
-    type: String,
+    type: Number,
     required: true
   }
 }, { timestamps: true });

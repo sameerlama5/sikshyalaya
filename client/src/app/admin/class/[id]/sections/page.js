@@ -1,4 +1,5 @@
 'use client'
+
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
 import { useParams } from 'next/navigation'
@@ -18,14 +19,17 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import Select from 'react-select'
 
-
 const Sections = () => {
   const params = useParams()
   const [sectionList, setSectionList] = useState([])
 
   const fetchSections = async () => {
-    const { data } = await axios.get(`http://localhost:8000/class/${params.id}/sections`)
-    setSectionList(data)
+    try {
+      const { data } = await axios.get(`http://localhost:8000/class/${params.id}/sections`)
+      setSectionList(data)
+    } catch (error) {
+      console.error('Error fetching sections:', error)
+    }
   }
 
   useEffect(() => {
@@ -35,41 +39,55 @@ const Sections = () => {
   const validationSchema = Yup.object({
     sectionName: Yup.string().required('Section Name is required'),
     class: Yup.number().required('Class is required'),
-    subjects: Yup.string().required('Subject are required'),
-    classTeacher: Yup.string().required('Class teacher name is required'),
-    students: Yup.string().required('Students are required'),
-    teachers: Yup.string().required('Teachers are required'),
+    subjects: Yup.array().min(1, 'Select at least one subject').required('Subjects are required'),
+    classTeacher: Yup.object().required('Class teacher name is required'),
+    students: Yup.array().min(1, 'Select at least one student').required('Students are required'),
+    teachers: Yup.array().min(1, 'Select at least one teacher').required('Teachers are required'),
     roomNumber: Yup.number().required('Room Number is required'),
   })
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    // Handle form submission
-    console.log(values)
-    // You can make your API request here
-    setSubmitting(false)
-    resetForm()
+    try {
+      console.log(values)
+      resetForm()
+    } catch (error) {
+      console.error('Error submitting form:', error)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
-  const [selectedSubjects, setSelectedSubjects] = useState([])
   const [subjectList, setSubjectList] = useState([])
+  const [teacherList, setTeacherList] = useState([])
+  const [studentList, setStudentList] = useState([])
 
-  const setHandleChange = (item)=>{
-    setSelectedSubjects(item)
+  const fetchSubjects = async () => {
+    try {
+      const { data } = await axios.get('http://localhost:8000/subjects')
+      setSubjectList(data.map(({ subjectName, _id }) => ({ label: subjectName, value: _id })))
+    } catch (error) {
+      console.error('Error fetching subjects:', error)
+    }
   }
 
-  const fetchSubjects = async() => {
-  const {data} = await  axios.get('http://localhost:8000/subjects')
-  const refactoredData = data.map((item)=>{
-    item.label = item.subjectName
-    item.value= item._id
-    return item
-  })
-  setSubjectList(refactoredData)
+  // fetch users according to the role and store it to the respective state
+  const fetchUsers = async () => {
+    try {
+      const { data } = await axios.get('http://localhost:8000/users')
+      const teachers = data.filter(user => user.role === 'teacher').map(({ fullName, _id }) => ({ label: fullName, value: _id }))
+      const students = data.filter(user => user.role === 'student').map(({ fullName, _id }) => ({ label: fullName, value: _id }))
+      setTeacherList(teachers)
+      setStudentList(students)
+    } catch (error) {
+      console.error('Error fetching users:', error)
+    }
   }
-  useEffect(()=>{
+
+  useEffect(() => {
     fetchSubjects()
-    
-  },[])
+    fetchUsers()
+  }, [])
+
   return (
     <>
       <Dialog>
@@ -84,16 +102,24 @@ const Sections = () => {
             </DialogDescription>
           </DialogHeader>
           <Formik
-            initialValues={{ sectionName: '', class: '', subjects: '', classTeacher: '', students: '', teachers: '', roomNumber: '' }}
+            initialValues={{
+              sectionName: '',
+              class: '',
+              subjects: [],
+              classTeacher: null,
+              students: [],
+              teachers: [],
+              roomNumber: ''
+            }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue }) => (
               <Form>
-                <div className="grid gap-4 py-2 ">
+                <div className="grid gap-4 py-2">
 
                   {/* Section Name */}
-                  <div className="grid grid-cols-4 items-center gap-2 ">
+                  <div className="grid grid-cols-4 items-center gap-2">
                     <Label htmlFor="sectionName" className="text-right font-semibold">
                       Section Name
                     </Label>
@@ -106,81 +132,67 @@ const Sections = () => {
                     <ErrorMessage name="sectionName" component="div" className="text-red-500 col-span-4 text-right text-sm" />
                   </div>
 
-                  {/* Class*/}
-                  <div className="grid grid-cols-4 items-center gap-2 ">
-                    <Label htmlFor="class" className="text-right font-semibold">
-                      Class
-                    </Label>
-                    <Field
-                      as={Input}
-                      disabled
-                      value={2}
-                      id="class"
-                      name="class"
-                      className="col-span-3"
-                    />
-                    <ErrorMessage name="class" component="div" className="text-red-500 col-span-4 text-right text-sm" />
-                  </div>
-
-                   {/* Subjects*/}
-                   <div className="grid grid-cols-4 items-center gap-2 ">
+                  {/* Class */}
+                  <div className="grid grid-cols-4 items-center gap-2">
                     <Label htmlFor="subjects" className="text-right font-semibold">
                       Subjects
                     </Label>
                     <Select
                       isMulti
-                      value={selectedSubjects}
-                      className='w-72'
-                      onChange={setHandleChange}
+                      name="subjects"
+                      onChange={options => setFieldValue('subjects', options)}
                       options={subjectList}
+                      className="col-span-3"
                     />
                     <ErrorMessage name="subjects" component="div" className="text-red-500 col-span-4 text-right text-sm" />
                   </div>
 
-                  {/* Class Teacher*/}
-                  <div className="grid grid-cols-4 items-center gap-2 ">
+                  {/* Class Teacher */}
+                  <div className="grid grid-cols-4 items-center gap-2">
                     <Label htmlFor="classTeacher" className="text-right font-semibold">
                       Class Teacher
                     </Label>
-                    <Field
-                      as={Input}
-                      id="classTeacher"
+                    <Select
                       name="classTeacher"
+                      onChange={option => setFieldValue('classTeacher', option)}
+                      options={teacherList}
                       className="col-span-3"
                     />
                     <ErrorMessage name="classTeacher" component="div" className="text-red-500 col-span-4 text-right text-sm" />
                   </div>
 
-                   {/* Students*/}
-                   <div className="grid grid-cols-4 items-center gap-2 ">
+                  {/* Students */}
+                  <div className="grid grid-cols-4 items-center gap-2">
                     <Label htmlFor="students" className="text-right font-semibold">
                       Students
                     </Label>
-                    <Field
-                      as={Input}
-                      id="students"
+                    <Select
+                      isMulti
                       name="students"
+                      onChange={options => setFieldValue('students', options)}
+                      options={studentList}
                       className="col-span-3"
                     />
                     <ErrorMessage name="students" component="div" className="text-red-500 col-span-4 text-right text-sm" />
                   </div>
 
-                   {/* Teachers*/}
-                   <div className="grid grid-cols-4 items-center gap-2 ">
+                  {/* Teachers */}
+                  <div className="grid grid-cols-4 items-center gap-2">
                     <Label htmlFor="teachers" className="text-right font-semibold">
-                    Teachers
+                      Teachers
                     </Label>
-                    <Field
-                      as={Input}
-                      id="teachers"
+                    <Select
+                      isMulti
                       name="teachers"
+                      onChange={options => setFieldValue('teachers', options)}
+                      options={teacherList}
                       className="col-span-3"
                     />
                     <ErrorMessage name="teachers" component="div" className="text-red-500 col-span-4 text-right text-sm" />
                   </div>
 
-                   {/* Room Number*/}
-                   <div className="grid grid-cols-4 items-center gap-2 ">
+                  {/* Room Number */}
+                  <div className="grid grid-cols-4 items-center gap-2">
                     <Label htmlFor="roomNumber" className="text-right font-semibold">
                       Room Number
                     </Label>
@@ -195,7 +207,7 @@ const Sections = () => {
 
                 </div>
                 <DialogFooter>
-                  <Button type="submit" disabled={isSubmitting}>Save </Button>
+                  <Button type='submit' disabled={isSubmitting}>Submit</Button>
                 </DialogFooter>
               </Form>
             )}
@@ -204,16 +216,12 @@ const Sections = () => {
       </Dialog>
 
       <div className='flex gap-4'>
-        {
-          sectionList.length > 0 && sectionList.map((item) => {
-            return (
-              <div key={item._id} className='bg-black text-white p-4 w-36'>
-                Section - {item.sectionName}
-                Total Students: {item.students.length}
-              </div>
-            )
-          })
-        }
+        {sectionList.length > 0 && sectionList.map(item => (
+          <div key={item._id} className='bg-black text-white p-4 w-36'>
+            <div>Section - {item.sectionName}</div>
+            <div>Total Students: {item.students.length}</div>
+          </div>
+        ))}
       </div>
     </>
   )
