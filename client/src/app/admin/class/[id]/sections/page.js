@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import Select from 'react-select'
+
 
 const Sections = () => {
   const params = useParams()
@@ -48,6 +50,26 @@ const Sections = () => {
     resetForm()
   }
 
+  const [selectedSubjects, setSelectedSubjects] = useState([])
+  const [subjectList, setSubjectList] = useState([])
+
+  const setHandleChange = (item)=>{
+    setSelectedSubjects(item)
+  }
+
+  const fetchSubjects = async() => {
+  const {data} = await  axios.get('http://localhost:8000/subjects')
+  const refactoredData = data.map((item)=>{
+    item.label = item.subjectName
+    item.value= item._id
+    return item
+  })
+  setSubjectList(refactoredData)
+  }
+  useEffect(()=>{
+    fetchSubjects()
+    
+  },[])
   return (
     <>
       <Dialog>
@@ -91,6 +113,8 @@ const Sections = () => {
                     </Label>
                     <Field
                       as={Input}
+                      disabled
+                      value={2}
                       id="class"
                       name="class"
                       className="col-span-3"
@@ -103,11 +127,12 @@ const Sections = () => {
                     <Label htmlFor="subjects" className="text-right font-semibold">
                       Subjects
                     </Label>
-                    <Field
-                      as={Input}
-                      id="subjects"
-                      name="subjects"
-                      className="col-span-3"
+                    <Select
+                      isMulti
+                      value={selectedSubjects}
+                      className='w-72'
+                      onChange={setHandleChange}
+                      options={subjectList}
                     />
                     <ErrorMessage name="subjects" component="div" className="text-red-500 col-span-4 text-right text-sm" />
                   </div>

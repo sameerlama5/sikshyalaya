@@ -9,8 +9,14 @@ const postNewSubjectInSectionId = async (req, res) => {
 
 
 const getsSubjectBySectionId = async (req, res) => {
+
+};
+
+const getAllSubjects = async (req, res) => {
+  const data = await Subject.find()
+  res.send(data)
 };
 
 
 
-module.exports = {postNewSubjectInSectionId,getsSubjectBySectionId}
+module.exports = {postNewSubjectInSectionId,getsSubjectBySectionId,getAllSubjects}
