@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import {
   Dialog,
@@ -21,7 +21,8 @@ import Select from "react-select";
 
 const Sections = () => {
   const params = useParams();
-  
+  const router = useRouter()
+  const pathname = usePathname()
   // States
   const [sectionList, setSectionList] = useState([]);
   const [subjectList, setSubjectList] = useState([]);
@@ -102,13 +103,15 @@ const Sections = () => {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     const dataToSubmit = {
       ...values,
+      class: params.id,
       classTeacher: values.classTeacher.value, 
       subjects: values.subjects.map((subject) => subject.value), 
       students: values.students.map((student) => student.value), 
       teachers: values.teachers.map((teacher) => teacher.value), 
     };
 
-    alert(JSON.stringify(dataToSubmit, null, 2)); 
+    const { data } = await axios.post(`http://localhost:8000/class/${params.id}/sections`, dataToSubmit)
+  
     setSubmitting(false);
     resetForm();
   };
@@ -240,11 +243,15 @@ const Sections = () => {
           </Formik>
         </DialogContent>
       </Dialog>
-      <div className='flex gap-4'>
+      <div
+
+      className='flex  inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]  gap-4'>
         {
           sectionList.length > 0 && sectionList.map((item) => {
             return (
-              <div key={item._id} className='bg-black text-white p-4 w-36'>
+              <div
+              onClick={()=>router.push(pathname+'/'+item._id)}
+              key={item._id} className='bg-black/10 h-12 m-16'>
                 Section - {item.sectionName}
                 Total Students: {item.students.length}
               </div>
