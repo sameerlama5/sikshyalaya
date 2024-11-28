@@ -36,7 +36,7 @@ const Sections = () => {
 
   // Fetch data functions
   const fetchSections = async () => {
-    const { data } = await axios.get(`http://localhost:8000/class/${params.id}/sections`);
+    const { data } = await axios.get(`http://localhost:8000/class/${params.classId}/sections`);
     setSectionList(data);
   };
 
@@ -103,14 +103,14 @@ const Sections = () => {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     const dataToSubmit = {
       ...values,
-      class: params.id,
+      class: params.classId,
       classTeacher: values.classTeacher.value, 
       subjects: values.subjects.map((subject) => subject.value), 
       students: values.students.map((student) => student.value), 
       teachers: values.teachers.map((teacher) => teacher.value), 
     };
 
-    const { data } = await axios.post(`http://localhost:8000/class/${params.id}/sections`, dataToSubmit)
+    const { data } = await axios.post(`http://localhost:8000/class/${params.classId}/sections`, dataToSubmit)
   
     setSubmitting(false);
     resetForm();
