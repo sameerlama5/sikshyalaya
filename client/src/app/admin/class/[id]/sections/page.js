@@ -28,9 +28,7 @@ const Sections = () => {
     setSectionList(data)
   }
 
-  useEffect(() => {
-    fetchSections()
-  }, [])
+
 
   const validationSchema = Yup.object({
     sectionName: Yup.string().required('Section Name is required'),
@@ -66,10 +64,11 @@ const Sections = () => {
   })
   setSubjectList(refactoredData)
   }
-  useEffect(()=>{
+
+  useEffect(() => {
+    fetchSections()
     fetchSubjects()
-    
-  },[])
+  }, [])
   return (
     <>
       <Dialog>
