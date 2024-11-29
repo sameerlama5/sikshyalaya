@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import {
   Dialog,
@@ -13,84 +13,132 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import Select from 'react-select'
+import { useToast } from "@/hooks/use-toast";
 
 const Sections = () => {
-  const params = useParams()
-  const [sectionList, setSectionList] = useState([])
+  const { toast } = useToast()
+  const params = useParams();
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const [sectionList, setSectionList] = useState([]);
+  const [subjectList, setSubjectList] = useState([]);
+  const [studentList, setStudentList] = useState([]);
+  const [teacherList, setTeacherList] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
 
   const fetchSections = async () => {
-    try {
-      const { data } = await axios.get(`http://localhost:8000/class/${params.id}/sections`)
-      setSectionList(data)
-    } catch (error) {
-      console.error('Error fetching sections:', error)
-    }
-  }
-
-  useEffect(() => {
-    fetchSections()
-  }, [])
-
-  const validationSchema = Yup.object({
-    sectionName: Yup.string().required('Section Name is required'),
-    class: Yup.number().required('Class is required'),
-    subjects: Yup.array().min(1, 'Select at least one subject').required('Subjects are required'),
-    classTeacher: Yup.object().required('Class teacher name is required'),
-    students: Yup.array().min(1, 'Select at least one student').required('Students are required'),
-    teachers: Yup.array().min(1, 'Select at least one teacher').required('Teachers are required'),
-    roomNumber: Yup.number().required('Room Number is required'),
-  })
-
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      console.log(values)
-      resetForm()
-    } catch (error) {
-      console.error('Error submitting form:', error)
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  const [subjectList, setSubjectList] = useState([])
-  const [teacherList, setTeacherList] = useState([])
-  const [studentList, setStudentList] = useState([])
+    const { data } = await axios.get(`http://localhost:8000/class/${params.classId}/sections`);
+    setSectionList(data);
+  };
 
   const fetchSubjects = async () => {
-    try {
-      const { data } = await axios.get('http://localhost:8000/subjects')
-      setSubjectList(data.map(({ subjectName, _id }) => ({ label: subjectName, value: _id })))
-    } catch (error) {
-      console.error('Error fetching subjects:', error)
-    }
-  }
+    const { data } = await axios.get("http://localhost:8000/subjects");
+    const refactoredData = data.map((item) => {
+      item.label = item.subjectName;
+      item.value = item._id;
+      return item;
+    });
+    setSubjectList(refactoredData);
+  };
 
-  // fetch users according to the role and store it to the respective state
-  const fetchUsers = async () => {
+  const fetchUser = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8000/users')
-      const teachers = data.filter(user => user.role === 'teacher').map(({ fullName, _id }) => ({ label: fullName, value: _id }))
-      const students = data.filter(user => user.role === 'student').map(({ fullName, _id }) => ({ label: fullName, value: _id }))
-      setTeacherList(teachers)
-      setStudentList(students)
+      const { data } = await axios.get("http://localhost:8000/users");
+      const refactoredData = data.map((item) => ({
+        label: item.fullName,
+        value: item._id,
+        role: item.role,
+      }));
+
+      const teachers = refactoredData.filter((item) => item.role === "teacher");
+      const students = refactoredData.filter((item) => item.role !== "teacher");
+
+      setTeacherList(teachers);
+      setStudentList(students);
     } catch (error) {
-      console.error('Error fetching users:', error)
+      console.error("Error fetching user data:", error);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchSubjects()
-    fetchUsers()
-  }, [])
+    fetchSections();
+    fetchSubjects();
+    fetchUser();
+  }, []);
+
+  // Validation schema using Yup
+  const validationSchema = Yup.object({
+    sectionName: Yup.string().required("Section Name is required"),
+    class: Yup.number().required("Class is required"),
+    subjects: Yup.array()
+      .min(1, "At least one subject is required")
+      .required("Subjects are required"),
+    classTeacher: Yup.object()
+      .shape({
+        label: Yup.string().required("Class teacher label is required"),
+        value: Yup.string().required("Class teacher value is required"),
+      })
+      .required("Class teacher is required"),
+
+    students: Yup.array()
+      .min(1, "At least one student is required")
+      .required("Students are required"),
+    teachers: Yup.array()
+      .min(1, "At least one teacher is required")
+      .required("Teachers are required"),
+    roomNumber: Yup.number().required("Room Number is required"),
+  });
+
+  // Handle form submission
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    const dataToSubmit = {
+      ...values,
+      class: params.classId,
+      classTeacher: values.classTeacher.value,
+      subjects: values.subjects.map((subject) => subject.value),
+      students: values.students.map((student) => student.value),
+      teachers: values.teachers.map((teacher) => teacher.value),
+    };
+
+    try {
+      const { data } = await axios.post(`http://localhost:8000/class/${params.classId}/sections`, dataToSubmit);
+      if (data) {
+        toast({
+          title: data.msg,
+        });
+        setIsDialogOpen(false);  
+        fetchSections(); 
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: error?.response?.data?.msg,
+      });
+    }
+
+    setSubmitting(false);
+    resetForm();
+  };
+
 
   return (
     <>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button className="rounded bg-black m-4 text-white" variant="outline">Add New Section</Button>
         </DialogTrigger>
@@ -133,6 +181,13 @@ const Sections = () => {
                   </div>
 
                   {/* Class */}
+                  <div className="grid grid-cols-4 items-center gap-2">
+                    <Label htmlFor="class" className="text-right font-semibold">Class</Label>
+                    <Field as={Input} id="class" name="class" className="col-span-3" />
+                    <ErrorMessage name="class" component="div" className="text-red-500 col-span-4 text-right text-sm" />
+                  </div>
+
+                  {/* Subjects */}
                   <div className="grid grid-cols-4 items-center gap-2">
                     <Label htmlFor="subjects" className="text-right font-semibold">
                       Subjects
@@ -215,14 +270,24 @@ const Sections = () => {
         </DialogContent>
       </Dialog>
 
-      <div className='flex gap-4'>
-        {sectionList.length > 0 && sectionList.map(item => (
-          <div key={item._id} className='bg-black text-white p-4 w-36'>
-            <div>Section - {item.sectionName}</div>
-            <div>Total Students: {item.students.length}</div>
-          </div>
-        ))}
+      <div className='flex gap-4' >
+      {sectionList.length > 0 ? (
+          sectionList.map(item => (
+            <Card key={item._id} onClick={() => router.push(pathname + '/' + item._id)} className='cursor-pointer w-60'>
+              <CardHeader>
+                <CardTitle>Section - {item.sectionName}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Total Students: {item.students.length}</p>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <p>No section in this class</p>
+        )}
       </div>
+
+
     </>
   )
 }

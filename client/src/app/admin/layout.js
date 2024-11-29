@@ -23,7 +23,7 @@ export default function Layout({ children }) {
     },
     {
       title: "Approval",
-      url: "approval",
+      url: "/admin/approval",
       icon: ChevronsLeftRightEllipsisIcon,
     },
     {
