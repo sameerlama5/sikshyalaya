@@ -127,7 +127,7 @@ const Sections = () => {
                     <Label htmlFor="subjects" className="text-right font-semibold">
                       Subjects
                     </Label>
-                    <Select
+                    <Select   //here select id imported form the different component of react select library.
                       isMulti
                       value={selectedSubjects}
                       className='w-72'
