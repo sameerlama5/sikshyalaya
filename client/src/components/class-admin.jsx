@@ -31,7 +31,7 @@ export default function ClassManagement() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to fetch classes",
+        description: error.response?.message,
         variant: "destructive",
       })
     }
@@ -48,18 +48,19 @@ export default function ClassManagement() {
         },
         body: JSON.stringify({ gradeLevel: Number(gradeLevel), academicYear }),
       })
-      if (!response.ok) throw new Error('Failed to add class')
+      const data = await response.json()
       toast({
-        title: "Success",
-        description: "Class added successfully",
+        title: response.status ==200 ? "Success": "Failed",
+        description: data.msg,
       })
       setGradeLevel('')
       setAcademicYear('')
       fetchClasses()
     } catch (error) {
+      debugger;
       toast({
         title: "Error",
-        description: "Failed to add class",
+        description:  error.response?.message,
         variant: "destructive",
       })
     } finally {

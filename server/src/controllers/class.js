@@ -2,6 +2,8 @@ const Class = require("../models/class");
 const Section = require("../models/section");
 
 const addNewClass = async (req, res) => {
+    const classExists = await Class.exists({academicYear: req.body.academicYear,gradeLevel: req.body.gradeLevel})
+    if(classExists) return res.status(409).send({msg: 'Class already exist for the acedemic year'})
     Class.create(req.body)
     res.send({msg: 'class  has been created'})
   };
