@@ -9,4 +9,6 @@ router.get("/sections/:sectionId/subjects", getsSubjectBySectionId);
 
 router.get('/subjects',getAllSubjects)
 
+
+
 module.exports = router;

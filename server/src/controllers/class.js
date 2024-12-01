@@ -24,5 +24,12 @@ const addNewClass = async (req, res) => {
     res.send({msg: 'Section created successfully!'})
   };
 
-  module.exports = {addNewClass,getAllClass,getSectionsByClassId,postNewSectionInClassId }; 
+
+  const deleteSectionById = async (req, res) => {
+ const data =  await Section.findByIdAndDelete(req.params.sectionId)
+  if(data) res.send('Section Deleted successfully!')
+  };
+  
+
+  module.exports = {addNewClass,getAllClass,deleteSectionById,getSectionsByClassId,postNewSectionInClassId }; 
   

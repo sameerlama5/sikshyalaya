@@ -27,6 +27,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import Select from 'react-select'
 import { useToast } from "@/hooks/use-toast";
+import SubjectForm from '@/components/add-subject'
+import { Trash2Icon } from 'lucide-react'
 
 const Sections = () => {
   const { toast } = useToast()
@@ -84,7 +86,6 @@ const Sections = () => {
   // Validation schema using Yup
   const validationSchema = Yup.object({
     sectionName: Yup.string().required("Section Name is required"),
-    class: Yup.number().required("Class is required"),
     subjects: Yup.array()
       .min(1, "At least one subject is required")
       .required("Subjects are required"),
@@ -136,8 +137,21 @@ const Sections = () => {
   };
 
 
+
+const handleDelete =  async (sectionId)=>{
+ const res = await axios.delete(`http://localhost:8000/sections/${sectionId}`)
+ if(res.status ==200) alert("deleted successfully")
+}
+
+
+
+
+
+
+
   return (
     <>
+
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button className="rounded bg-black m-4 text-white" variant="outline">Add New Section</Button>
@@ -152,7 +166,6 @@ const Sections = () => {
           <Formik
             initialValues={{
               sectionName: '',
-              class: '',
               subjects: [],
               classTeacher: null,
               students: [],
@@ -180,12 +193,6 @@ const Sections = () => {
                     <ErrorMessage name="sectionName" component="div" className="text-red-500 col-span-4 text-right text-sm" />
                   </div>
 
-                  {/* Class */}
-                  <div className="grid grid-cols-4 items-center gap-2">
-                    <Label htmlFor="class" className="text-right font-semibold">Class</Label>
-                    <Field as={Input} id="class" name="class" className="col-span-3" />
-                    <ErrorMessage name="class" component="div" className="text-red-500 col-span-4 text-right text-sm" />
-                  </div>
 
                   {/* Subjects */}
                   <div className="grid grid-cols-4 items-center gap-2">
@@ -277,7 +284,16 @@ const Sections = () => {
               <CardHeader>
                 <CardTitle>Section - {item.sectionName}</CardTitle>
               </CardHeader>
+              
               <CardContent>
+                <Trash2Icon onClick={(e)=>{
+                   e.stopPropagation()
+                  handleDelete(item._id)
+                  fetchSections()
+                }
+                }
+                  
+                  />
                 <p>Total Students: {item.students.length}</p>
               </CardContent>
             </Card>

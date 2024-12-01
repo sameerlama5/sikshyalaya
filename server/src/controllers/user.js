@@ -63,7 +63,12 @@ const loginUser = async (req, res) => {
 }
 
 const getAllUser = async (req, res) => {
-  const data = await User.find()
+  let data
+  if(req.query?.role){
+    data = await User.find({role: req.query?.role})
+  }else{
+    data = await User.find()
+  }
   res.send(data)
 }
 

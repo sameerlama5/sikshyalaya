@@ -5,13 +5,14 @@ const {
     addNewClass,
     getAllClass,
     postNewSectionInClassId,
-    getSectionsByClassId
+    getSectionsByClassId,
+    deleteSectionById
 } = require("../controllers/class");
 
 router.post("/class", addNewClass);
 router.get("/class", getAllClass);
 router.get("/class/:classId/sections", getSectionsByClassId);
 router.post("/class/:classId/sections", postNewSectionInClassId);
-
+router.delete("/sections/:sectionId", deleteSectionById);
 module.exports = router;
 
