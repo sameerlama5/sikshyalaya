@@ -29,6 +29,9 @@ import Select from 'react-select'
 import { useToast } from "@/hooks/use-toast";
 import SubjectForm from '@/components/add-subject'
 import { Trash2Icon } from 'lucide-react'
+import ClassLayout from '../../classLayout'
+import Link from 'next/link'
+import BreadCrumbsItem from '@/components/dynamic-breadCrumbs'
 
 const Sections = () => {
   const { toast } = useToast()
@@ -150,7 +153,7 @@ const handleDelete =  async (sectionId)=>{
 
 
   return (
-    <>
+    <ClassLayout breadCrumbsItem={<BreadCrumbsItem depth={2}/>}>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
@@ -304,7 +307,7 @@ const handleDelete =  async (sectionId)=>{
       </div>
 
 
-    </>
+    </ClassLayout>
   )
 }
 

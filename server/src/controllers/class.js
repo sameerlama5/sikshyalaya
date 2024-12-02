@@ -26,10 +26,17 @@ const addNewClass = async (req, res) => {
 
 
   const deleteSectionById = async (req, res) => {
- const data =  await Section.findByIdAndDelete(req.params.sectionId)
+  const data =  await Section.findByIdAndDelete(req.params.sectionId)
   if(data) res.send('Section Deleted successfully!')
   };
   
 
-  module.exports = {addNewClass,getAllClass,deleteSectionById,getSectionsByClassId,postNewSectionInClassId }; 
+  
+
+  const getSectionById = async (req, res) => {
+    const data =  await Section.findById(req.params.sectionId).populate('classTeacher')
+    if(data) res.send(data)
+    };
+    
+  module.exports = {addNewClass,getAllClass,getSectionById,deleteSectionById,getSectionsByClassId,postNewSectionInClassId }; 
   

@@ -1,6 +1,11 @@
+
 'use client'
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Label } from './ui/label';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
 
 const SubjectForm = () => {
   const [subjectName, setSubjectName] = useState('');
@@ -46,9 +51,16 @@ const SubjectForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-xl">
-      <h2 className="text-2xl font-bold mb-6 text-center">Add New Subject</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Edit Profile</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add New Subjects</DialogTitle>
+       
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="subjectName" className="block text-sm font-medium text-gray-700">
             Subject Name
@@ -88,10 +100,9 @@ const SubjectForm = () => {
           Add Subject
         </button>
       </form>
-      {message && (
-        <p className="mt-4 text-sm text-center text-gray-600">{message}</p>
-      )}
-    </div>
+      </DialogContent>
+    </Dialog>
+
   );
 };
 
