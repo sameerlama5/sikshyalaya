@@ -9,8 +9,11 @@ const postNewSubjectInSectionId = async (req, res) => {
 
 
 const getsSubjectBySectionId = async (req, res) => {
-
+ const data= await Subject.findById('674bd511d38271084ff09fca')
+ console.log(data.teacher)
 };
+
+// getsSubjectBySectionId()
 
 const getAllSubjects = async (req, res) => {
   const data = await Subject.find()

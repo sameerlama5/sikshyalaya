@@ -1,10 +1,12 @@
 'use client'
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
-
+import { usePathname } from 'next/navigation'
 import { ChevronsLeftRightEllipsisIcon, CircleSlash2Icon, Home, Inbox, Settings } from "lucide-react"
 
 export default function Layout({ children }) {
+  const pathname = usePathname()
+
   const adminItems = [
     {
       title: "Dashboard",
@@ -23,7 +25,7 @@ export default function Layout({ children }) {
     },
     {
       title: "Approval",
-      url: "approval",
+      url: "/admin/approval",
       icon: ChevronsLeftRightEllipsisIcon,
     },
     {
@@ -38,6 +40,7 @@ export default function Layout({ children }) {
       <main  className="w-[100%]">
         <SidebarTrigger />
         <div className="m-12">
+       
         {children}
         </div>
      

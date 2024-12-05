@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,7 +31,7 @@ export default function ClassManagement() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to fetch classes",
+        description: error.response?.message,
         variant: "destructive",
       })
     }
@@ -47,18 +48,19 @@ export default function ClassManagement() {
         },
         body: JSON.stringify({ gradeLevel: Number(gradeLevel), academicYear }),
       })
-      if (!response.ok) throw new Error('Failed to add class')
+      const data = await response.json()
       toast({
-        title: "Success",
-        description: "Class added successfully",
+        title: response.status ==200 ? "Success": "Failed",
+        description: data.msg,
       })
       setGradeLevel('')
       setAcademicYear('')
       fetchClasses()
     } catch (error) {
+      debugger;
       toast({
         title: "Error",
-        description: "Failed to add class",
+        description:  error.response?.message,
         variant: "destructive",
       })
     } finally {
@@ -69,65 +71,73 @@ export default function ClassManagement() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Class Management</h1>
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Add New Class</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={addClass} className="space-y-4">
-            <div>
-              <label htmlFor="gradeLevel" className="block text-sm font-medium text-gray-200 mb-1">
-                Grade Level
-              </label>
-              <Input
-                id="gradeLevel"
-                type="number"
-                placeholder="Enter grade level"
-                value={gradeLevel}
-                onChange={(e) => setGradeLevel(e.target.value)}
-                required
-                min="1"
-                max="12"
-              />
-            </div>
-            <div>
-              <label htmlFor="academicYear" className="block text-sm font-medium text-gray-200 mb-1">
-                Academic Year
-              </label>
-              <Input
-                id="academicYear"
-                type="text"
-                placeholder="Enter academic year"
-                value={academicYear}
-                onChange={(e) => setAcademicYear(e.target.value)}
-                required
-                title="Please enter the academic year"
-              />
-            </div>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Adding...' : 'Add Class'}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Existing Classes</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {classes.length > 0 ? (
-            <ul className="space-y-2 text-black">
-              {classes.map((cls) => (
-                <li onClick={()=>router.push(`class/${cls._id}/sections`)} key={cls._id} className="bg-gray-100 p-2 rounded">
-                  Grade {cls.gradeLevel} - {cls.academicYear}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No classes found.</p>
-          )}
-        </CardContent>
-      </Card>
+      <div className='flex flex-col gap-4'>
+        <Card className="bg-transparent border-black border border-opacity-30 w-1/3">
+          <CardHeader>
+            <CardTitle className="text-xl text-black bg-gray-200 p-2">Add New Class</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={addClass} className="space-y-4">
+              <div>
+                <label htmlFor="gradeLevel" className="block text-sm font-medium text-black mb-1">
+                  Grade Level
+                </label>
+                <Input
+                  id="gradeLevel"
+                  type="number"
+                  placeholder="Enter grade level"
+                  value={gradeLevel}
+                  onChange={(e) => setGradeLevel(e.target.value)}
+                  className='text-black'
+                  required
+                  min="1"
+                  max="12"
+                />
+              </div>
+              <div>
+                <label htmlFor="academicYear" className="block text-sm font-medium text-black mb-1">
+                  Academic Year
+                </label>
+                <Input
+                  id="academicYear"
+                  type="text"
+                  placeholder="Enter academic year"
+                  value={academicYear}
+                  onChange={(e) => setAcademicYear(e.target.value)}
+                  className='text-black'
+                  required
+                  title="Please enter the academic year"
+                />
+              </div>
+              <Button type="submit" disabled={loading} className="rounded bg-black text-white mt-20" variant="outline">{loading ? 'Adding...' : 'Add Class'}</Button>
+            </form>
+          </CardContent>
+        </Card>
+        <Card className="bg-transparent  border-black border border-opacity-30 w-full">
+          <CardHeader>
+            <CardTitle className="text-xl text-black bg-gray-200 p-2">Existing Classes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {classes.length > 0 ? (
+              <div className=" text-black flex gap-4 flex-wrap">
+                {classes.map((item) => (
+                  <Card key={item._id} onClick={() => router.push(`class/${item._id}/sections`)} className='cursor-pointer w-[229px] hover:opacity-95 rounded-none'>
+                    <CardHeader>
+                      <CardTitle>Grade - {item.gradeLevel}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p>Year: {item.academicYear}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <p className='text-black'>No classes found.</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
       <Toaster />
     </div>
   );

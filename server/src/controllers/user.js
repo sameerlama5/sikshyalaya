@@ -2,6 +2,25 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'kyalin.khanal@gmail.com', 
+    pass: 'bozf yicw eydb doxj'
+  },
+});
+
+async function sendEmail(emailText, recipientUser) {
+  const info = await transporter.sendMail({
+    from: '"Kaylin Khanal👻" <kyalin.khanal@gmail.com>', 
+    to: recipientUser, 
+    subject: "Approval ✔", 
+    text: emailText, 
+    html: emailText, 
+  });
+}
 
 const registerUser = async (req, res) => {
   //1. email exists or not?
@@ -44,7 +63,12 @@ const loginUser = async (req, res) => {
 }
 
 const getAllUser = async (req, res) => {
-  const data = await User.find()
+  let data
+  if(req.query?.role){
+    data = await User.find({role: req.query?.role})
+  }else{
+    data = await User.find()
+  }
   res.send(data)
 }
 
@@ -52,6 +76,7 @@ const approveUser = async (req, res) => {
   const user = await User.findById(req.params.userId)
   user.isVerified = true
   user.save()
+  sendEmail("Dear user, you have been approved in sikshyalaya, Kindly please login now!!", user.email )
   res.send('user approved')
 }
 

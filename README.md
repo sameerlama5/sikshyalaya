@@ -21,7 +21,7 @@ Smart Schooling Solution
     - [x] Generate Token (JWT)
 - [ ] Admin Panel
   - [x] Teacher and Student login approval via Admin 
-  - [ ] Add different courses and class and schedules, and section and classteacher for the section
+  - [x] Add different courses and class, and section and classteacher for the section
 - [ ] Teacher Panel
   - [ ] Teacher can add course content for the subject he is assigned.
   - [ ] Create multiple topics based on table of contents, and add multiple segments/info to the topics
@@ -29,7 +29,7 @@ Smart Schooling Solution
   - [ ] Can search/view courses-topics/ info of the topics
 
 ### Phase 2: Academic Features
-
+- [x] Send email to teacher/students on approval
 - [x] Grade Book and Report Card Generation
 - [ ] Assignment Submission and Grading
 - [ ] Exam Schedule Management
