@@ -13,18 +13,18 @@ export const TotalCountCard = ({ role, total, className, ...props }) => {
       <CardHeader className="p-0">
         <div className="flex justify-between items-center gap-2">
           <CardTitle>
-            <h1 className="rounded-full w-[7ch] capitalize text-green-300 text-sm font-normal -sm bg-white px-1">
+            <h1 className="rounded-full w-[8ch] capitalize text-green-400 text-sm font-normal bg-white shadow-sm px-2 cursor-default">
               {role}
             </h1>
           </CardTitle>
-          <Button variant="ghost" className="hover:bg-none">
+          <Button variant="ghost" className="hover:bg-transparent">
             <Ellipsis />
           </Button>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col p-0">
-        <strong>{total}</strong>
-        <strong className="justify-start capitalize">
+        <strong className="text-black text-3xl">{total}</strong>
+        <strong className="justify-start capitalize text-black opacity-60">
           {`${role}${total > 1 ? "s" : ""}`}
         </strong>
       </CardContent>
