@@ -15,7 +15,7 @@ const addNewClass = async (req, res) => {
 
   
   const getSectionsByClassId = async (req, res) => {
-  const data = await  Section.find({class: req.params.classId}).populate("subjects")
+  const data = await  Section.find({class: req.params.classId})
     res.send(data)
   };
 

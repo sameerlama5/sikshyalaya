@@ -44,6 +44,8 @@ const Sections = () => {
   const [studentList, setStudentList] = useState([]);
   const [teacherList, setTeacherList] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSubjectDialogOpen, setIsSubjectDialogOpen] = useState(false);
+
 
 
   const fetchSections = async () => {
@@ -280,6 +282,92 @@ const handleDelete =  async (sectionId)=>{
         </DialogContent>
       </Dialog>
 
+      <Dialog open={isSubjectDialogOpen} onOpenChange={setIsSubjectDialogOpen}>
+        <DialogTrigger asChild>
+          <Button className="rounded bg-black m-4 text-white" variant="outline">Add New Subject</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[525px]">
+          <DialogHeader>
+            <DialogTitle>Add New Subject</DialogTitle>
+            <DialogDescription>
+              Add new subject for the class
+            </DialogDescription>
+          </DialogHeader>
+          <Formik
+            initialValues={{
+              subjectName: '',
+              section: '',
+              teacher: ''
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting, setFieldValue }) => (
+              <Form>
+                <div className="grid gap-4 py-2">
+
+                  {/* Section Name */}
+                  <div className="grid grid-cols-4 items-center gap-2">
+                    <Label htmlFor="subjectName" className="text-right font-semibold">
+                      Subject Name
+                    </Label>
+                    <Field
+                      as={Input}
+                      id="subjectName"
+                      name="subjectName"
+                      className="col-span-3"
+                    />
+                    <ErrorMessage name="subjectName" component="div" className="text-red-500 col-span-4 text-right text-sm" />
+                  </div>
+
+
+              
+                  {/* Class Teacher */}
+                  <div className="grid grid-cols-4 items-center gap-2">
+                    <Label htmlFor="section" className="text-right font-semibold">
+                    Section
+                    </Label>
+                    <Select
+                      name="section"
+                      onChange={option => setFieldValue('section', option)}
+
+                      options={sectionList.map((item=> {
+                        return {
+                          label: item.sectionName,
+                          value: item._id
+                        }
+                      }))}
+                      className="col-span-3"
+                    />
+                    <ErrorMessage name="section" component="div" className="text-red-500 col-span-4 text-right text-sm" />
+                  </div>
+
+                  {/* Students */}
+                  <div className="grid grid-cols-4 items-center gap-2">
+                    <Label htmlFor="students" className="text-right font-semibold">
+                      Teacher
+                    </Label>
+                    <Select
+                      name="teacher"
+                      onChange={options => setFieldValue('teacher', options)}
+                      options={teacherList}
+                      className="col-span-3"
+                    />
+                    <ErrorMessage name="teacher" component="div" className="text-red-500 col-span-4 text-right text-sm" />
+                  </div>
+
+          
+              
+                </div>
+                <DialogFooter>
+                  <Button type='submit' disabled={isSubmitting}>Submit</Button>
+                </DialogFooter>
+              </Form>
+            )}
+          </Formik>
+        </DialogContent>
+      </Dialog>
+
       <div className='flex gap-4' >
       {sectionList.length > 0 ? (
           sectionList.map(item => (
@@ -297,6 +385,7 @@ const handleDelete =  async (sectionId)=>{
                 }
                   
                   />
+                      <p>Room Number: {item.roomNumber}</p>
                 <p>Total Students: {item.students.length}</p>
               </CardContent>
             </Card>
