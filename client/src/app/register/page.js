@@ -220,7 +220,7 @@ export default function RegisterPage() {
                     <SelectContent className="bg-black text-white border-white/20">
                       <SelectItem value="student">Student</SelectItem>
                       <SelectItem value="teacher">Teacher</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
+                      
                     </SelectContent>
                   </Select>
                   {formik.touched.role && formik.errors.role && (
