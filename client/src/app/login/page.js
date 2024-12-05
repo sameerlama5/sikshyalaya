@@ -31,29 +31,32 @@ const validationSchema = Yup.object({
 });
 
 export default function RegisterPage() {
-  const router = useRouter()
-  const { toast } = useToast()
+  const router = useRouter();
+  const { toast } = useToast();
   const formik = useFormik({
     initialValues: {
       email: "",
-      password: ""
+      password: "",
     },
     validationSchema,
     onSubmit: async (values) => {
       try {
-       const {data} =await  axios.post('http://localhost:8000/login', values)
-       const {isLoggednIn, user} =data
-       if(isLoggednIn) router.push(`/${user.role}/dashboard`)
-      if(data){
-        toast({
-          title: data.msg
-        })
-      }
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/login`,
+          values,
+        );
+        const { isLoggednIn, user } = data;
+        if (isLoggednIn) router.push(`/${user.role}/dashboard`);
+        if (data) {
+          toast({
+            title: data.msg,
+          });
+        }
       } catch (error) {
         toast({
           variant: "destructive",
-          title: error?.response?.data?.msg
-        })
+          title: error?.response?.data?.msg,
+        });
       }
     },
   });
@@ -78,14 +81,16 @@ export default function RegisterPage() {
           </div>
 
           <div className="max-w-2xl mx-auto backdrop-blur-sm bg-white/10 rounded-2xl shadow-[0_0_15px_rgba(255,255,255,0.07)] p-8 border border-white/10">
-            <h2 className="text-2xl font-semibold text-center mb-8">Create Your Account</h2>
+            <h2 className="text-2xl font-semibold text-center mb-8">
+              Create Your Account
+            </h2>
 
             <form onSubmit={formik.handleSubmit} className="space-y-6">
               <div className="flex flex-col  gap-6 md:grid-cols-2">
-             
-
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white">Email</Label>
+                  <Label htmlFor="email" className="text-white">
+                    Email
+                  </Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
@@ -98,13 +103,16 @@ export default function RegisterPage() {
                     />
                   </div>
                   {formik.touched.email && formik.errors.email && (
-                    <p className="text-sm text-red-400">{formik.errors.email}</p>
+                    <p className="text-sm text-red-400">
+                      {formik.errors.email}
+                    </p>
                   )}
                 </div>
 
-              
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-white">Password</Label>
+                  <Label htmlFor="password" className="text-white">
+                    Password
+                  </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <Input
@@ -117,11 +125,11 @@ export default function RegisterPage() {
                     />
                   </div>
                   {formik.touched.password && formik.errors.password && (
-                    <p className="text-sm text-red-400">{formik.errors.password}</p>
+                    <p className="text-sm text-red-400">
+                      {formik.errors.password}
+                    </p>
                   )}
                 </div>
-
-             
               </div>
 
               <div className="pt-4">
