@@ -8,7 +8,7 @@ export const TotalCountCard = ({ role, total, className, ...props }) => {
   return (
     <Card
       {...props}
-      className={cn("flex-grow aspect-video max-w-52 max-h-32 p-2", className)}
+      className={cn("w-full aspect-auto p-[30px]", className)}
     >
       <CardHeader className="p-0">
         <div className="flex justify-between items-center gap-2">

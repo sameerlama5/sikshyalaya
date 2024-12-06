@@ -38,13 +38,12 @@ const Dashboard = async () => {
     },
   ];
   return (
-    <main className="flex ">
+    <main className="xl:flex w-full gap-[18px]">
       {/* flex-wrap */}
-      <section className="">
-        <div className="flex flex-wrap gap-2">
-          <div className="grid grid-cols-2 gap-2">
+      <section className="w-full">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-4 gap-[30px]">
             <TotalCountCard
-              className="bg-lamaPurple "
+              className="bg-lamaPurple w-full"
               role={"admin"}
               total={admins.length}
             />
@@ -53,8 +52,6 @@ const Dashboard = async () => {
               role={"teacher"}
               total={teachers.length}
             />
-          </div>
-          <div className="grid grid-cols-2 gap-2">
             <TotalCountCard
               className="bg-lamaPurple "
               role={"student"}
@@ -65,10 +62,9 @@ const Dashboard = async () => {
               role={"parent"}
               total={parents.length}
             />
-          </div>
         </div>
-        <section>
-          <CircleChart />
+        <section className="mt-[30px]">
+          <CircleChart/>
         </section>
         <div>bottom</div>
       </section>
