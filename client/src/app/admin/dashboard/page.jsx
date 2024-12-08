@@ -41,7 +41,7 @@ const Dashboard = async () => {
     <main className="xl:flex w-full gap-[18px]">
       {/* flex-wrap */}
       <section className="w-full">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-4 gap-[30px]">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-2 3xl:grid-cols-4 gap-[30px]">
             <TotalCountCard
               className="bg-lamaPurple w-full"
               role={"admin"}
