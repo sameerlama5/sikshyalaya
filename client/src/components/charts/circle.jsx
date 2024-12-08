@@ -62,7 +62,7 @@ export function CircleChart() {
   }, []);
 
   return (
-    <section className="w-full 2xl:max-w-[400px] border-transparent border-4 rounded-md bg-lamaSkyLight p-[30px]">
+    <section className="w-full 2 xl:max-w-[400px] border-transparent border-4 rounded-md bg-lamaSkyLight p-[30px]">
       <div className="relative w-full">
         <div className="flex justify-between items-center">
           <h1>Students</h1>

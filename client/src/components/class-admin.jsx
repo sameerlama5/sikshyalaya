@@ -57,7 +57,6 @@ export default function ClassManagement() {
       setAcademicYear('')
       fetchClasses()
     } catch (error) {
-      debugger;
       toast({
         title: "Error",
         description:  error.response?.message,
